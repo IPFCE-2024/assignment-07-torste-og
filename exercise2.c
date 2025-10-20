@@ -68,7 +68,7 @@ bool full(stack *s)
     
     node *test = malloc(sizeof(node));
     if (test == NULL)
-        return true;  /* no more memory available, stack considered full */
+        return true;
 
     free(test);
     return false;
