@@ -21,6 +21,8 @@ void initialize(stack *s)
 {
     /* pre-condition: true */
     /* post-condition: stack is empty */
+
+    s->head = NULL;
 }
 
 /* Insert item x at the top of stack s */
@@ -29,6 +31,15 @@ void push(int x, stack *s)
     /* pre-condition: true (linked list can always accept more items) */
     /* post-condition: x is added to top of stack */
 
+    node *new_node = malloc(sizeof(node));
+    if (new_node == NULL) {
+        fprintf(stderr, "Couldn't allocate memory in push()\n");
+        exit(EXIT_FAILURE);
+    }
+
+    new_node->data = x;
+    new_node->next = s->head;
+    s->head = new_node;
 }
 
 /* Return (and remove) the top item of stack s */
@@ -37,7 +48,16 @@ int pop(stack *s)
   /* pre-condition: stack must not be empty */
   /* post-condition: top item is removed and returned */
 
-  return 0; // placeholder - replace with actual implementation
+  if (empty(s)) {
+        fprintf(stderr, "Can't pop from an empty stack\n");
+        exit(EXIT_FAILURE);
+    }
+
+    node *temp = s->head;
+    int value = temp->data;
+    s->head = temp->next;
+    free(temp);
+    return value;
 }
 
 /* Test whether a stack can accept more pushes */
@@ -45,6 +65,12 @@ bool full(stack *s)
 {
     /* pre-condition: true */
     /* post-condition: Returns true if stack is full, false otherwise */
+    
+    node *test = malloc(sizeof(node));
+    if (test == NULL)
+        return true;  /* no more memory available, stack considered full */
+
+    free(test);
     return false;
 }
 
@@ -54,7 +80,7 @@ bool empty(stack *s)
     /* pre-condition: true */
     /* post-condition: returns true if stack is empty, false otherwise */
 
-    return false; // placeholder - replace with actual implementation
+    return s->head == NULL;
 }
 
 /* Print the contents of the stack */
@@ -62,4 +88,12 @@ void print(stack *s)
 {
     /* pre-condition: true */
     /* post-condition: prints all items in the stack */
+
+    node *current = s->head;
+    printf("Stack contents (top to bottom): ");
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
 }
