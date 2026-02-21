@@ -9,7 +9,7 @@
  */
 
 #include "taylor_sine.h"
-#include <math.h>
+#include <assert.h>
 
 /* 
  * Calculate sine using Taylor series approximation
@@ -17,17 +17,38 @@
  * n: number of terms in the series
  * Returns: approximation of sin(x)
  */
+
+
+#define PI 3.14
+
+double norm_angle(double x) {
+    while (x > PI*2)
+        x -= PI*2;
+    while (x < -PI*2)
+        x += PI*2;
+}
+
 double taylor_sine(double x, int n) {
     // TODO: Implement the Taylor series approximation for sine
     // Hint: The series is: x - x^3/3! + x^5/5! - x^7/7! + ...
     // Use a loop to calculate n terms of the series
 
-    assert(n >= 1);
+    assert(n > 0);
 
-    double result;
-    for (int i = 1; i < n*2; i = i + 2) {
-        result = result - (pow(x, i) / x);
+    norm_angle(x);
+
+    double term = x;
+    double sum = x;
+
+    for (int i = 1; i < n; i = i++) {
+        term *= (x * x) / ((2.0 * i) * (2.0 * i + 1.0));
+        
+        if (i % 2 == 1) {
+            sum -= term;
+        } else {
+            sum += term;
+        }
     }
     
-    return result;
+    return sum;
 }
