@@ -8,7 +8,7 @@
  * Taylor series for sin(x) = x - x^3/3! + x^5/5! - x^7/7! + ...
  */
 
-#include "taylor_sine.h"
+#include "include/taylor_sine.h"
 #include <assert.h>
 
 /* 
@@ -19,13 +19,15 @@
  */
 
 
-#define PI 3.14
+#define PI 3.1415926535
 
 double norm_angle(double x) {
-    while (x > PI*2)
-        x -= PI*2;
-    while (x < -PI*2)
-        x += PI*2;
+    while (x > PI)
+        x -= PI;
+    while (x < -PI)
+        x += PI;
+
+    return x;
 }
 
 double taylor_sine(double x, int n) {
@@ -35,12 +37,12 @@ double taylor_sine(double x, int n) {
 
     assert(n > 0);
 
-    norm_angle(x);
+    x = norm_angle(x);
 
     double term = x;
     double sum = x;
 
-    for (int i = 1; i < n; i = i++) {
+    for (int i = 1; i < n; i++) {
         term *= (x * x) / ((2.0 * i) * (2.0 * i + 1.0));
         
         if (i % 2 == 1) {
